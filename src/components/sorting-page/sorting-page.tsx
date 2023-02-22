@@ -3,6 +3,7 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
 import styles from "./sorting.module.css";
+import { Direction } from '../../types/direction';
 
 export const SortingPage: React.FC = () => {
   //массив должен состоять из целых чисел [0; 100]
@@ -25,7 +26,7 @@ export const SortingPage: React.FC = () => {
           name="sorting"
           value="select"
           checked={checked === "select"}
-          onChange={setChecked("select")}
+          onChange={()=>setChecked("select")}
           disabled={false}
         />
         <RadioInput
@@ -33,7 +34,7 @@ export const SortingPage: React.FC = () => {
           name="sorting"
           value="bubble"
           checked={checked === "bubble"}
-          onChange={setChecked("bubble")}
+          onChange={()=>setChecked("bubble")}
           disabled={false}
         />
         <Button

@@ -21,13 +21,13 @@ function App() {
           <Route path="/recursion">
             <StringComponent />
           </Route>
-          <Route path="/fibonacci">
+           <Route path="/fibonacci">
             <FibonacciPage />
           </Route>
-          <Route path="/sorting">
+         <Route path="/sorting">
             <SortingPage />
           </Route>
-          <Route path="/stack">
+      {/*     <Route path="/stack">
             <StackPage />
           </Route>
           <Route path="/queue">
@@ -35,7 +35,7 @@ function App() {
           </Route>
           <Route path="/list">
             <ListPage />
-          </Route>
+          </Route> */}
         </Switch>
       </BrowserRouter>
     </div>
