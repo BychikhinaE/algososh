@@ -4,18 +4,33 @@ import styles from "./queue.module.css";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
+import { Queue } from ".";
+import { ElementStates } from "../../types/element-states";
 
+//ох
 export const QueuePage: React.FC = () => {
   const [input, setInput] = useState<string>("");
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
+  const [mainArray, setMainArray] = 
+  useState<Array<{item: string, state: ElementStates}>>({item: '', state: ElementStates.Default});
+  const queue = new Queue<{item: string, state: ElementStates}>(7);
+
   //кнопкa «Добавить», по клику на неё должен вызываться метод очереди enqueue(item)
-  const onClickAdd = () => {};
+  const onClickAdd = async() => {
+    queue.enqueue({item: input, state: ElementStates.Default});
+    setMainArray(queue)
+  };
+
+
   //кнопкa «Удалить», по клику на неё должен вызываться метод очереди dequeue();
-  const onClickDelete = () => {};
+  const onClickDelete = () => {
+
+  };
+
   const onClickClean = () => {};
-  const arr: Array<string> = [];
+  
 
   return (
     <SolutionLayout title="Очередь">
@@ -47,8 +62,8 @@ export const QueuePage: React.FC = () => {
         />
       </form>
       <ul>
-        {arr.length > 0 &&
-          arr.map((item, index) => (
+        {mainArray &&
+          mainArray.map((item, index) => (
             <li key={index}>
               <Circle letter={item} />
             </li>

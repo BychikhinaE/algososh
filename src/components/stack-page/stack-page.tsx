@@ -4,16 +4,44 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import styles from "./stack.module.css";
 import { Circle } from "../ui/circle/circle";
+import { ElementStates } from "../../types/element-states";
+import { Stack } from ".";
 
+//стили, лоудер и блокировка кнопок..
 export const StackPage: React.FC = () => {
   const [input, setInput] = useState<string>("");
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
-  const onClickAdd = () => {};
-  const onClickDelete = () => {};
-  const onClickClean = () => {};
-  const arr: Array<string> = [];
+
+  const [mainArray, setMainArray] = useState<Array<{item: string, state: ElementStates}>>();
+  const st = new Stack<{item: string, state: ElementStates}>();
+
+  const onClickAdd = async() => {
+st.push({
+  item: input,
+  state: ElementStates.Changing
+})
+setMainArray([st.getItems()])
+setInput('')
+await delay(500);
+st.peak.state = ElementStates.Default;
+setMainArray([st.getItems()])
+  };
+
+  const onClickDelete = async () => {
+    st.peak.state = ElementStates.Changing;
+    setMainArray([st.getItems()])
+    await delay(500);
+    st.pop()
+    setMainArray([st.getItems()])
+  };
+
+  const onClickClean = () => {
+    st.clean();
+    setMainArray([st.getItems()])
+  };
+
   return (
     <SolutionLayout title="Стек">
       <form className={styles.form}>
@@ -44,10 +72,11 @@ export const StackPage: React.FC = () => {
         />
       </form>
       <ul>
-        {arr.length > 0 &&
-          arr.map((item, index) => (
+        {mainArray &&
+          mainArray.map((item, index) => (
             <li key={index}>
-              <Circle letter={item} />
+              <Circle letter={item.item} state={item.state} 
+              index={index}/>
             </li>
           ))}
       </ul>
