@@ -1,4 +1,24 @@
-.form{
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
+.form{
+    display: grid;
+    grid-template-columns: 1fr auto auto 56px auto;
+    gap: 12px;
+    align-items: baseline;
 }
 /* interval 500 */
+.list {
+    list-style: none;
+    display: flex;
+   justify-content: center;
+    max-width: 656px;
+    width: 100%;
+    gap: 16px;
+    padding: 0;
+    margin-top: 52px;
+  }
+  

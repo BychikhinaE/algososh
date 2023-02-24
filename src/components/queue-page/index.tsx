@@ -2,10 +2,12 @@ interface IQueue<T> {
     enqueue: (item: T) => void;
     dequeue: () => void;
     peak: () => T | null;
+    getItems: () => Array<T | null>;
+    clean: () => void;
   }
   
   export class Queue<T> implements IQueue<T> {
-    private container: (T | null)[] = [];
+    private container:  (T | null)[] = [];
     private head = 0;
     private tail = 0;
     private readonly size: number = 0;
@@ -39,12 +41,21 @@ interface IQueue<T> {
     peak = (): T | null => {
       if (this.isEmpty()) {
         throw new Error("No elements in the queue");
-      } else {
+      } 
         return this.container[this.head % this.size]
-      }
-      return null; 
+      
     };
   
     isEmpty = () => this.length === 0;
+
+    getItems = () => this.container;
+
+    clean = () => {
+      this.head = 0;
+      this.tail = 0;
+      this.length = 0;
+      this.container = [];
+  };
+
   }
   

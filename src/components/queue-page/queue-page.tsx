@@ -7,20 +7,23 @@ import { Circle } from "../ui/circle/circle";
 import { Queue } from ".";
 import { ElementStates } from "../../types/element-states";
 
-//ох
+type TElemArray = {item?: string, state: ElementStates} 
+
 export const QueuePage: React.FC = () => {
   const [input, setInput] = useState<string>("");
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
-  const [mainArray, setMainArray] = 
-  useState<Array<{item: string, state: ElementStates}>>({item: '', state: ElementStates.Default});
-  const queue = new Queue<{item: string, state: ElementStates}>(7);
+  const [mainArray, setMainArray] = useState<Array<TElemArray | null>>(Array.from({ length: 7 }, () => ({ item: '', state: ElementStates.Default })));
+  //const queue = new Queue<TElemArray>(7);
+  const [queue] = useState(new Queue<TElemArray>(7))
+  console.log(queue)
 
   //кнопкa «Добавить», по клику на неё должен вызываться метод очереди enqueue(item)
   const onClickAdd = async() => {
-    queue.enqueue({item: input, state: ElementStates.Default});
-    setMainArray(queue)
+    // queue.enqueue({item: input, state: ElementStates.Default});
+   // setMainArray(queue.getItems())
+    setInput('')
   };
 
 
@@ -29,11 +32,15 @@ export const QueuePage: React.FC = () => {
 
   };
 
-  const onClickClean = () => {};
+  const onClickClean = () => {
+    // queue.clean()
+    // setMainArray([...queue.getItems()])
+  };
   
 
   return (
     <SolutionLayout title="Очередь">
+      <article className={styles.container}>
       <form className={styles.form}>
         <Input
           type="text"
@@ -54,6 +61,8 @@ export const QueuePage: React.FC = () => {
           disabled={false}
           isLoader={false}
         />
+        {/* всё еще стыдно.. */}
+        <div> </div>
         <Button
           text="Очистить"
           onClick={onClickClean}
@@ -61,14 +70,22 @@ export const QueuePage: React.FC = () => {
           isLoader={false}
         />
       </form>
-      <ul>
+      <ul className={styles.list}>
         {mainArray &&
-          mainArray.map((item, index) => (
+          mainArray.slice(0, 7).map((item, index) => (
             <li key={index}>
-              <Circle letter={item} />
+              <Circle 
+              letter={item?.item} 
+              index={index}
+              head={'head'}
+              tail={'tail'}
+              state={item?.state}
+              />
             </li>
           ))}
       </ul>
+      </article>
+      
     </SolutionLayout>
   );
 };

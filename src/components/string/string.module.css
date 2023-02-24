@@ -1,27 +1,27 @@
-.container{
-display: flex;
-flex-direction: column;
-align-items: center;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.form{
-    display: grid;
-    grid-template-columns: 1fr 178px;
-    gap: 12px;
-    min-width: 45%;
-    flex-wrap: wrap;
-    flex-direction: row;
+.form {
+  display: grid;
+  grid-template-columns: 1fr 178px;
+  gap: 12px;
+  min-width: 45%;
+  /* flex-wrap: wrap;
+  flex-direction: row; */
 }
-.list{
-    list-style: none;
-    display: flex;
-    max-width: 85%;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 72px;
-    padding: 0;
+.list {
+  list-style: none;
+  display: flex;
+  max-width: 85%;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 72px;
+  padding: 0;
 }
 
-.item{
-    margin-top: 48px;
+.item {
+  margin-top: 48px;
 }
