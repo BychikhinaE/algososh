@@ -1,7 +1,7 @@
 interface IQueue<T> {
     enqueue: (item: T) => void;
     dequeue: () => void;
-    peak: () => T | null;
+    // peak: () => T | null;
     getItems: () => Array<T | null>;
     clean: () => void;
   }
@@ -38,17 +38,17 @@ interface IQueue<T> {
       }
     };
   
-    peak = (): T | null => {
-      if (this.isEmpty()) {
-        throw new Error("No elements in the queue");
-      } 
-        return this.container[this.head % this.size]
+    // peak = (): T | null => {
+    //   if (this.isEmpty()) {
+    //     throw new Error("No elements in the queue");
+    //   } 
+    //     return this.container[this.head % this.size]
       
-    };
+    // };
   
     isEmpty = () => this.length === 0;
 
-    getItems = () => this.container;
+    getItems = () => [...this.container];
 
     clean = () => {
       this.head = 0;
@@ -57,5 +57,12 @@ interface IQueue<T> {
       this.container = [];
   };
 
+  getIndexHead = () => {
+    return this.head
+  }
+
+  getIndexTail = () => {
+    return this.tail
+  }
   }
   

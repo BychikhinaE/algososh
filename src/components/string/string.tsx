@@ -26,8 +26,6 @@ export const StringComponent: React.FC = () => {
     firstIndex: number,
     secondIndex: number
   ) => {
-    console.log("swap", firstIndex, secondIndex);
-
     const temp = {
       item: arr[firstIndex].item,
       state: ElementStates.Modified,
@@ -49,8 +47,6 @@ export const StringComponent: React.FC = () => {
     //массив букв из введенной строки без состояния
     const letters: Array<string> = input.split("");
 
-    console.log("letters", letters);
-
     //все синие
     letters.forEach((item) =>
       arr.push({ item: item, state: ElementStates.Default })
@@ -67,7 +63,6 @@ export const StringComponent: React.FC = () => {
         if (i === left || i === rigth) {
           arr[i].state = ElementStates.Changing;
         }
-        console.log(arr, "cicl");
         //отправляем покрашенный массив на отрисовку
         setMainArray([...arr]);
       }
@@ -85,12 +80,12 @@ export const StringComponent: React.FC = () => {
 
   return (
     <SolutionLayout title="Строка">
-      <article className={styles.container}>
+      <section className={styles.container}>
         <form className={styles.form} onSubmit={onSubmit}>
           <Input
             isLimitText={true}
             maxLength={11}
-            value={input || ''}
+            value={input || ""}
             onChange={onChange}
           />
           <Button
@@ -109,7 +104,7 @@ export const StringComponent: React.FC = () => {
             ))}
           </ul>
         )}
-      </article>
+      </section>
     </SolutionLayout>
   );
 };

@@ -9,8 +9,6 @@
   grid-template-columns: 1fr 178px;
   gap: 12px;
   min-width: 45%;
-  /* flex-wrap: wrap;
-  flex-direction: row; */
 }
 .list {
   list-style: none;

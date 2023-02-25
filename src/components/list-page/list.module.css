@@ -1,7 +1,35 @@
-.form{
 
-}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .form {
+    display: grid;
+    grid-template-columns: 204px repeat(4, minmax(auto, 175px)) ;
+    gap: 12px;
+    min-width: 77%;
+    align-items: baseline;
+  }
 
-.fornmIndex{
-    
-}
+  .formIndex{
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: 204px repeat(2, minmax(auto, 362px));
+    gap: 12px;
+    min-width: 77%;
+    align-items: center;
+  }
+
+  .list {
+    list-style: none;
+    display: flex;
+    max-width: 85%;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 0;
+    margin-top: 90px;
+  }
+  .item{
+     
+  }

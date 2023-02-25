@@ -5,6 +5,7 @@ interface IStack<T> {
   getSize: () => number;
   clean: () => void;
   getItems: () => Array<T>;
+  isEmpty: () => boolean;
 }
 
 export class Stack<T> implements IStack<T> {
@@ -15,26 +16,18 @@ export class Stack<T> implements IStack<T> {
   };
 
   pop = (): void => {
-    // if (this.getSize()) {
-      this.container.pop();
-    // }
+    this.container.pop();
   };
 
   peak = (): T | null => {
-    if(this.getSize()){
-      const index = this.getSize()-1
-  const elem =  this.container[index]
-  //console.log(elem)
-   return elem
- } else { return null;}
-
-};
-
-  // get peak(): T {
-  //   const index = this.getSize() - 1;
-  //   const elem = this.container[index];
-  //   return elem;
-  // };
+    if (this.getSize()) {
+      const index = this.getSize() - 1;
+      const elem = this.container[index];
+      return elem;
+    } else {
+      return null;
+    }
+  };
 
   getSize = () => this.container.length;
 
@@ -43,4 +36,6 @@ export class Stack<T> implements IStack<T> {
   };
 
   getItems = () => this.container;
+
+  isEmpty = () => this.container.length === 0;
 }

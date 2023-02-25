@@ -15,10 +15,8 @@ const swap = (
   secondIndex: number
 ) => {
   const temp = arr[firstIndex];
-
   arr[firstIndex] = arr[secondIndex];
   arr[secondIndex] = temp;
-  //отправляем переставленный массив на отрисовку
   setArray(arr);
 };
 
@@ -87,11 +85,19 @@ const selectionSort = async (
 export const SortingPage: React.FC = () => {
   //массив должен состоять из целых чисел [0; 100]
   //минимальное количество элементов массива minLen = 3, максимальное maxLen = 17.
-  //Максимальное значение элемента массива равно 100, это же значение является процентным соотношением высоты столбца.
-  //В качестве максимальной высоты считайте 340px.
-  // высоты элементов массива
-  // `${(340 * arr[i]) / 100}px`
   const [mainArray, setMainArray] = useState<TMainArray>([]);
+
+  type TFilterState = {
+    isDisAllExсeptButtonSort: boolean;
+    isLoadButtonAsc?: boolean;
+    isLoadButtonDes?: boolean;
+  };
+
+  const [filterState, setFilterState] = useState<TFilterState>({
+    isDisAllExсeptButtonSort: false,
+    isLoadButtonAsc: false,
+    isLoadButtonDes: false,
+  });
 
   const randomArr = () => {
     const array = [];
@@ -108,23 +114,44 @@ export const SortingPage: React.FC = () => {
 
   const [checked, setChecked] = useState<string>("select");
 
-  const sortAscending = () => {
-    if (mainArray) {
+  const sortAscending = async () => {
+    if (mainArray.length > 0) {
+      setFilterState({
+        isDisAllExсeptButtonSort: true,
+        isLoadButtonAsc: true,
+      });
+
       if (checked === "bubble") {
-        bubbleSort(mainArray, Direction.Ascending, setMainArray);
+        await bubbleSort(mainArray, Direction.Ascending, setMainArray);
       }
       if (checked === "select") {
-        selectionSort(mainArray, Direction.Ascending, setMainArray);
+        await selectionSort(mainArray, Direction.Ascending, setMainArray);
       }
+
+      setFilterState({
+        isDisAllExсeptButtonSort: false,
+        isLoadButtonAsc: false,
+      });
     }
   };
 
-  const sortDescending = () => {
-    if (checked === "bubble") {
-      bubbleSort(mainArray, Direction.Descending, setMainArray);
-    }
-    if (checked === "select") {
-      selectionSort(mainArray, Direction.Descending, setMainArray);
+  const sortDescending = async () => {
+    if (mainArray.length > 0) {
+      setFilterState({
+        isDisAllExсeptButtonSort: true,
+        isLoadButtonDes: true,
+      });
+
+      if (checked === "bubble") {
+        await bubbleSort(mainArray, Direction.Descending, setMainArray);
+      }
+      if (checked === "select") {
+        await selectionSort(mainArray, Direction.Descending, setMainArray);
+      }
+      setFilterState({
+        isDisAllExсeptButtonSort: false,
+        isLoadButtonDes: false,
+      });
     }
   };
 
@@ -134,7 +161,7 @@ export const SortingPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Сортировка массива">
-      <article className={styles.container}>
+      <section className={styles.container}>
         <div className={styles.filters}>
           <RadioInput
             label="Выбор"
@@ -142,7 +169,7 @@ export const SortingPage: React.FC = () => {
             value="select"
             checked={checked === "select"}
             onChange={() => setChecked("select")}
-            disabled={false}
+            disabled={filterState.isDisAllExсeptButtonSort}
           />
           <RadioInput
             label="Пузырёк"
@@ -150,29 +177,28 @@ export const SortingPage: React.FC = () => {
             value="bubble"
             checked={checked === "bubble"}
             onChange={() => setChecked("bubble")}
-            disabled={false}
+            disabled={filterState.isDisAllExсeptButtonSort}
           />
           <Button
             sorting={Direction.Ascending}
             text="По возрастанию"
             onClick={sortAscending}
-            disabled={false}
-            isLoader={false}
+            disabled={filterState.isLoadButtonDes}
+            isLoader={filterState.isLoadButtonAsc}
           />
           <Button
             sorting={Direction.Descending}
             text="По убыванию"
             onClick={sortDescending}
-            disabled={false}
-            isLoader={false}
+            disabled={filterState.isLoadButtonAsc}
+            isLoader={filterState.isLoadButtonDes}
           />
           {/* если остальной код не очень получается то на верстку можно забить же? */}
           <div> </div>
           <Button
             text="Новый массив"
             onClick={sortNewArray}
-            disabled={false}
-            isLoader={false}
+            disabled={filterState.isDisAllExсeptButtonSort}
           />
         </div>
         <ul className={styles.list}>
@@ -182,7 +208,7 @@ export const SortingPage: React.FC = () => {
             </li>
           ))}
         </ul>
-      </article>
+      </section>
     </SolutionLayout>
   );
 };

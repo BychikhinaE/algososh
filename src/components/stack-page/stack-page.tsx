@@ -10,7 +10,6 @@ import { delay } from "../string/string";
 
 type TElemArray = { item: string; state: ElementStates };
 
-//лоудер и блокировка кнопок..
 export const StackPage: React.FC = () => {
   const [input, setInput] = useState<string>("");
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,27 +24,22 @@ export const StackPage: React.FC = () => {
       item: input,
       state: ElementStates.Changing,
     });
-  //  console.log(st.getItems())
 
     setMainArray([...st.getItems()]);
     setInput("");
     await delay(500);
-   //console.log(st.peak)
-   st.peak()!.state = ElementStates.Default;
-   //console.log(st.peak)
+    st.peak()!.state = ElementStates.Default;
     setMainArray([...st.getItems()]);
-   // console.log(mainArray)
   };
 
   const onClickDelete = async () => {
-    if(st.peak()){
-
+    if (st.peak()) {
       st.peak()!.state = ElementStates.Changing;
-    setMainArray([...st.getItems()]);
-    await delay(500);
-    st.pop();
-    setMainArray([...st.getItems()]);
-  }
+      setMainArray([...st.getItems()]);
+      await delay(500);
+      st.pop();
+      setMainArray([...st.getItems()]);
+    }
   };
 
   const onClickClean = () => {
@@ -55,7 +49,7 @@ export const StackPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Стек">
-      <article className={styles.container}>
+      <section className={styles.container}>
         <form className={styles.form}>
           <Input
             type="text"
@@ -67,22 +61,19 @@ export const StackPage: React.FC = () => {
           <Button
             text="Добавить"
             onClick={onClickAdd}
-            disabled={false}
-            isLoader={false}
+            disabled={input.length === 0}
           />
           <Button
             text="Удалить"
             onClick={onClickDelete}
-            disabled={false}
-            isLoader={false}
+            disabled={st.isEmpty()}
           />
-          {/* мне стыдно за такую верстку, но это было быстро */}
+          {/* мне стыдно за такую верстку, но это было быстро когда другой код еще мучительнее((*/}
           <div> </div>
           <Button
             text="Очистить"
             onClick={onClickClean}
-            disabled={false}
-            isLoader={false}
+            disabled={st.isEmpty()}
           />
         </form>
         <ul className={styles.list}>
@@ -93,7 +84,7 @@ export const StackPage: React.FC = () => {
               </li>
             ))}
         </ul>
-      </article>
+      </section>
     </SolutionLayout>
   );
 };
