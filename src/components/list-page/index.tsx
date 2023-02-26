@@ -11,17 +11,25 @@ interface ILinkedList<T> {
   append: (element: T) => void;
   insertAt: (element: T, position: number) => void;
   getSize: () => number;
-  print: () => void;
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
   private head: Node<T> | null;
+  private tail: Node<T> | null;
   private size: number;
-  constructor() {
+
+  constructor(array?: Array<T>) {
     this.head = null;
+    this.tail = null;
     this.size = 0;
+
+    if (array) {
+      for (let i = 0; i < array.length; i++) {
+        this.append(array[i]);
+      }
+    }
   }
-//Добавить по индексу
+  //Добавить по индексу
   insertAt(element: T, index: number) {
     if (index < 0 || index > this.size) {
       console.log("Enter a valid index");
@@ -66,17 +74,90 @@ export class LinkedList<T> implements ILinkedList<T> {
     this.size++;
   }
 
+  prepend(element: T) {
+    const node = new Node(element, this.head);
+    this.head = node;
+    this.size++;
+  }
+
   getSize() {
     return this.size;
   }
 
-  print() {
+  deleteHead() {
+    if (!this.head) {
+      return null;
+    } else {
+      this.head = this.head.next;
+    }
+    this.size--;
+  }
+
+  deleteTail() {
+    if (!this.head) {
+      return null;
+    }
+
+    if (!this.head.next) {
+      this.head = null;
+    }
+
+    let prev = this.head;
+    let node = this.head?.next;
+
+    while (node?.next) {
+      prev = node;
+      node = node.next;
+    }
+    prev!.next = null;
+
+    this.size--;
+  }
+
+  deleteByIndex(index: number) {
+    if (index < 0 || index > this.size) {
+      console.log("Enter a valid index");
+      return;
+    }
+    if (index === 0) {
+      this.deleteHead();
+      return;
+    }
+    if (index === this.size - 1) {
+      this.deleteTail();
+      return;
+    }
+
+    let counter = 0;
+    let node = this.head as Node<T>;
+
+    while (counter !== index - 1 && node.next) {
+      counter++;
+      node = node.next;
+    }
+
+    node.next = node.next!.next;
+
+    this.size--;
+  }
+
+  getHead() {
+    return this.head;
+  }
+
+  getTail() {
+    return this.tail;
+  }
+
+  toArray() {
     let curr = this.head;
-    let res = "";
+    let array: Array<T> = [];
+
     while (curr) {
-      res += `${curr.value} `;
+      array.push(curr.value);
       curr = curr.next;
     }
-    // console.log(res);
+
+    return array;
   }
 }

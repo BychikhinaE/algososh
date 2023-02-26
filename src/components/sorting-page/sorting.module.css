@@ -1,8 +1,8 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .filters {
   display: grid;
@@ -12,13 +12,12 @@
 }
 
 .list {
-    list-style: none;
-    display: flex;
-    max-width: 85%;
-    gap: 10px;
-    min-height: 340px;
-    padding: 0;
-    margin: 0;
-    align-items: flex-end;
-  }
-  
+  list-style: none;
+  display: flex;
+  max-width: 85%;
+  gap: 10px;
+  min-height: 340px;
+  padding: 0;
+  margin: 0;
+  align-items: flex-end;
+}
