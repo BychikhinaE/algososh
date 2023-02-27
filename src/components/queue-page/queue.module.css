@@ -8,7 +8,8 @@
   display: grid;
   grid-template-columns: 1fr auto auto 56px auto;
   gap: 12px;
-  align-items: baseline;
+  /* align-items: baseline; */
+  align-content: center;
 }
 
 .list {

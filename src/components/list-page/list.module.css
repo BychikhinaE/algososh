@@ -8,7 +8,8 @@
   grid-template-columns: 204px repeat(4, minmax(auto, 175px));
   gap: 12px;
   min-width: 77%;
-  align-items: baseline;
+  /* align-items: baseline; */
+  align-content: center;
 }
 
 .formIndex {
@@ -17,7 +18,8 @@
   grid-template-columns: 204px repeat(2, minmax(auto, 362px));
   gap: 12px;
   min-width: 77%;
-  align-items: center;
+  /* align-items: center; */
+  align-content: center;
 }
 
 .list {

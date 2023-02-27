@@ -6,7 +6,7 @@
 
 .filters {
   display: grid;
-  grid-template-columns: 110px 140px auto auto 56px auto;
+  grid-template-columns: 110px 140px 205px 190px 56px auto;
   gap: 12px;
   align-items: center;
 }

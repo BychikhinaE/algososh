@@ -85,8 +85,6 @@ const selectionSort = async (
 export const SortingPage: React.FC = () => {
   //массив должен состоять из целых чисел [0; 100]
   //минимальное количество элементов массива minLen = 3, максимальное maxLen = 17.
-  const [mainArray, setMainArray] = useState<TMainArray>([]);
-
   type TFilterState = {
     isDisAllExсeptButtonSort: boolean;
     isLoadButtonAsc?: boolean;
@@ -112,6 +110,7 @@ export const SortingPage: React.FC = () => {
     return array;
   };
 
+  const [mainArray, setMainArray] = useState<TMainArray>(randomArr());
   const [checked, setChecked] = useState<string>("select");
 
   const sortAscending = async () => {

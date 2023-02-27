@@ -7,19 +7,25 @@ import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { Stack } from ".";
 import { delay } from "../string/string";
+import { useSimpleForm } from "../../hooks/useForm";
 
 type TElemArray = { item: string; state: ElementStates };
 
 export const StackPage: React.FC = () => {
-  const [input, setInput] = useState<string>("");
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
+  const {input, onChange, setInput} =useSimpleForm('')
+  const [buttonState, setButtonState] = useState({
+    isLoadForButtAdd: false,
+    isLoadForButtDel: false,
+  });
 
   const [mainArray, setMainArray] = useState<Array<TElemArray>>([]);
   const [st] = useState(new Stack<TElemArray>());
 
   const onClickAdd = async () => {
+    setButtonState((prevState)=>({
+      ...prevState,
+      isLoadForButtAdd: true,
+    }))
     st.push({
       item: input,
       state: ElementStates.Changing,
@@ -30,9 +36,19 @@ export const StackPage: React.FC = () => {
     await delay(500);
     st.peak()!.state = ElementStates.Default;
     setMainArray([...st.getItems()]);
+
+    setButtonState((prevState)=>({
+      ...prevState,
+      isLoadForButtAdd: false,
+    }))
   };
 
   const onClickDelete = async () => {
+    setButtonState((prevState)=>({
+      ...prevState,
+      isLoadForButtDel: true,
+    }))
+
     if (st.peak()) {
       st.peak()!.state = ElementStates.Changing;
       setMainArray([...st.getItems()]);
@@ -40,6 +56,11 @@ export const StackPage: React.FC = () => {
       st.pop();
       setMainArray([...st.getItems()]);
     }
+
+    setButtonState((prevState)=>({
+      ...prevState,
+      isLoadForButtDel: false,
+    }))
   };
 
   const onClickClean = () => {
@@ -50,7 +71,7 @@ export const StackPage: React.FC = () => {
   return (
     <SolutionLayout title="Стек">
       <section className={styles.container}>
-        <form className={styles.form}>
+        <div className={styles.form}>
           <Input
             type="text"
             isLimitText={true}
@@ -62,11 +83,13 @@ export const StackPage: React.FC = () => {
             text="Добавить"
             onClick={onClickAdd}
             disabled={input.length === 0}
+            isLoader={buttonState.isLoadForButtAdd}
           />
           <Button
             text="Удалить"
             onClick={onClickDelete}
             disabled={st.isEmpty()}
+            isLoader={buttonState.isLoadForButtDel}
           />
           {/* мне стыдно за такую верстку, но это было быстро когда другой код еще мучительнее((*/}
           <div> </div>
@@ -75,7 +98,7 @@ export const StackPage: React.FC = () => {
             onClick={onClickClean}
             disabled={st.isEmpty()}
           />
-        </form>
+        </div>
         <ul className={styles.list}>
           {mainArray &&
             mainArray.map((item, index) => (

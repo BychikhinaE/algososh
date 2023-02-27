@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./queue.module.css";
 import { Input } from "../ui/input/input";
@@ -7,6 +7,7 @@ import { Circle } from "../ui/circle/circle";
 import { Queue } from ".";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../string/string";
+import { useSimpleForm } from "../../hooks/useForm";
 
 type TElemArray = {
   item?: string;
@@ -16,11 +17,7 @@ type TElemArray = {
 };
 
 export const QueuePage: React.FC = () => {
-  const [input, setInput] = useState<string>("");
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
-
+  const { input, onChange, setInput } = useSimpleForm("");
   const [mainArray, setMainArray] = useState<Array<TElemArray>>(
     Array.from({ length: 7 }, () => ({
       state: ElementStates.Default,
@@ -28,15 +25,23 @@ export const QueuePage: React.FC = () => {
   );
 
   const [queue] = useState(new Queue<TElemArray>(7));
-  const [isDisabled, setIsDisabled] = useState({
+  const [buttonState, setButtonState] = useState({
     buttonDelete: true,
     buttonClean: true,
+    isLoadForButtAdd: false,
+    isLoadForButtDel: false,
   });
+
   const [indexTail, setIndexTail] = useState(queue.getIndexTail());
 
   const [indexHead, setIndexHead] = useState(queue.getIndexHead());
   //кнопкa «Добавить», по клику на неё должен вызываться метод очереди enqueue(item)
   const onClickAdd = async () => {
+    setButtonState((prevState) => ({
+      ...prevState,
+      isLoadForButtAdd: true,
+    }));
+
     mainArray[indexTail].state = ElementStates.Changing;
     setMainArray([...mainArray]);
 
@@ -57,14 +62,23 @@ export const QueuePage: React.FC = () => {
     setMainArray([...mainArray]);
 
     setInput("");
-    setIsDisabled({ buttonDelete: false, buttonClean: false });
+    setButtonState((prevState) => ({
+      ...prevState,
+      isLoadForButtAdd: false,
+      buttonDelete: false,
+      buttonClean: false,
+    }));
     setIndexTail(queue.getIndexTail());
     setIndexHead(queue.getIndexHead());
   };
 
   //кнопкa «Удалить», по клику на неё должен вызываться метод очереди dequeue();
   const onClickDelete = async () => {
-    //в примере-анимации tail указывает на предыдщий для queue элемент и значит удалить совпадение мы не можем, хвост позади головы получится
+    setButtonState((prevState) => ({
+      ...prevState,
+      isLoadForButtDel: true,
+    }));
+    //в примере-анимации tail указывает на предыдущий для queue элемент и значит удалить совпадение мы не можем, хвост позади головы получится
     if (indexHead === indexTail - 1) {
       if (indexHead === 6) {
         mainArray[indexHead] = {
@@ -73,8 +87,18 @@ export const QueuePage: React.FC = () => {
           isTail: false,
           isHead: true,
         };
-        setIsDisabled({ buttonDelete: true, buttonClean: false });
-      } 
+        setButtonState((prevState) => ({
+          ...prevState,
+          isLoadForButtDel: false,
+          buttonDelete: true,
+          buttonClean: false,
+        }));
+      }
+      setButtonState((prevState) => ({
+        ...prevState,
+        isLoadForButtDel: false,
+        buttonDelete: true,
+      }));
       setMainArray([...mainArray]);
       return;
     }
@@ -91,6 +115,10 @@ export const QueuePage: React.FC = () => {
       isHead: true,
     };
 
+    setButtonState((prevState) => ({
+      ...prevState,
+      isLoadForButtDel: false,
+    }));
     setMainArray([...mainArray]);
     setIndexHead(queue.getIndexHead());
     setIndexTail(queue.getIndexTail());
@@ -105,7 +133,11 @@ export const QueuePage: React.FC = () => {
       item.isHead = false;
     });
 
-    setIsDisabled({ buttonDelete: true, buttonClean: true });
+    setButtonState((prevState) => ({
+      ...prevState,
+      buttonDelete: true,
+      buttonClean: true,
+    }));
     setMainArray([...mainArray]);
     setIndexHead(queue.getIndexHead());
     setIndexTail(queue.getIndexTail());
@@ -126,17 +158,19 @@ export const QueuePage: React.FC = () => {
             text="Добавить"
             onClick={onClickAdd}
             disabled={input.length === 0 || indexTail === 7 ? true : false}
+            isLoader={buttonState.isLoadForButtAdd}
           />
           <Button
             text="Удалить"
             onClick={onClickDelete}
-            disabled={isDisabled.buttonDelete}
+            disabled={buttonState.buttonDelete}
+            isLoader={buttonState.isLoadForButtDel}
           />
           <div> </div>
           <Button
             text="Очистить"
             onClick={onClickClean}
-            disabled={isDisabled.buttonClean}
+            disabled={buttonState.buttonClean}
           />
         </div>
         <ul className={styles.list}>

@@ -1,19 +1,16 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import styles from "./fibonacci.module.css";
 import { delay } from "../string/string";
+import { useSimpleForm } from "../../hooks/useForm";
 
 export const FibonacciPage: React.FC = () => {
   const [mainArray, setMainArray] = useState<Array<number>>([]);
-  const [input, setInput] = useState<string>("");
+  const { input, onChange, setInput } = useSimpleForm("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState,  useEffect, useMemo } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -8,12 +8,11 @@ import { LinkedList } from ".";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../string/string";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
+import { useForm } from "../../hooks/useForm";
 
 type TElem = {
   item: string;
   state: ElementStates;
-  // head?: string;
-  // tail?: string;
 };
 type elemSmallCircle = {
   item: string;
@@ -21,8 +20,7 @@ type elemSmallCircle = {
 };
 
 export const ListPage: React.FC = () => {
-  const [inputElement, setInputElement] = useState<string>("");
-  const [inputIndex, setInputIndex] = useState<string>("");
+  const {values, onChange, setValues} = useForm({inputElement: '', inputIndex: ''});
   const [mainArray, setMainArray] = useState<Array<TElem>>([]);
   const [isLoader, setIsLoader] = useState({
     forButtHead: false,
@@ -34,12 +32,19 @@ export const ListPage: React.FC = () => {
     allDis: false,
   });
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputElement(e.target.value);
-  };
-  const onChangeIndex = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputIndex(e.target.value);
-  };
+  const isValidIndex = useMemo(() => {
+    if (values.inputIndex.length === 0) {
+      return false;
+    } else if (
+      Number(values.inputIndex) < mainArray.length &&
+      Number(values.inputIndex) > -1
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [mainArray.length, values.inputIndex]);
+
   const [list, setList] = useState(new LinkedList<TElem>());
   const [newElemInHead, setNewElemInHead] = useState<elemSmallCircle | null>(
     null
@@ -72,10 +77,10 @@ export const ListPage: React.FC = () => {
 
     //Переписали значение в newElem и сбросили input
     const newElem = {
-      item: inputElement,
+      item: values.inputElement,
       state: ElementStates.Default,
     };
-    setInputElement("");
+    setValues({...values, inputElement: ''});
 
     //Покажим элемент сверху
     setNewElemInHead({ item: newElem.item, index: 0 });
@@ -106,10 +111,10 @@ export const ListPage: React.FC = () => {
     }));
     //Переписали значение в newElem и сбросили input
     const newElem = {
-      item: inputElement,
+      item: values.inputElement,
       state: ElementStates.Default,
     };
-    setInputElement("");
+    setValues({...values, inputElement: ''});
     //Покажим элемент сверху
     setNewElemInHead({ item: newElem.item, index: mainArray.length - 1 });
     await delay(500);
@@ -147,12 +152,12 @@ export const ListPage: React.FC = () => {
     }));
     //Переписали значение в newElem и сбросили input
     const newElem = {
-      item: inputElement,
+      item: values.inputElement,
       state: ElementStates.Default,
     };
-    const index = Number(inputIndex);
-    setInputElement("");
-    setInputIndex("");
+    const index = Number(values.inputIndex);
+    setValues({...values, inputElement: '', inputIndex: ''});
+    // setInputIndex("");
 
     //Покажим элемент сверху
     setNewElemInHead({ item: newElem.item, index: index });
@@ -268,8 +273,8 @@ export const ListPage: React.FC = () => {
       forButtDelByInd: true,
       allDis: true,
     }));
-    let index = Number(inputIndex);
-    setInputIndex("");
+    let index = Number(values.inputIndex);
+    setValues({...values, inputIndex: ''});
 
     //раскрасим массив
     const colorArr = mainArray.map((elem, currIndex) => {
@@ -314,20 +319,21 @@ export const ListPage: React.FC = () => {
             isLimitText={true}
             maxLength={4}
             placeholder="Введите значение"
-            value={inputElement}
+            name='inputElement'
+            value={values.inputElement}
             onChange={onChange}
           />
           <Button
             text="Добавить в head"
             onClick={addInHead}
             isLoader={isLoader.forButtHead}
-            disabled={inputElement.length === 0 || isLoader.allDis}
+            disabled={values.inputElement.length === 0 || isLoader.allDis}
           />
           <Button
             text="Добавить в tail"
             onClick={addInTail}
             isLoader={isLoader.forButtTail}
-            disabled={inputElement.length === 0 || isLoader.allDis}
+            disabled={values.inputElement.length === 0 || isLoader.allDis}
           />
           <Button
             text="Удалить из head"
@@ -346,27 +352,22 @@ export const ListPage: React.FC = () => {
           <Input
             type="number"
             placeholder="Введите индекс"
-            value={inputIndex}
-            onChange={onChangeIndex}
+            name='inputIndex'
+            value={values.inputIndex}
+            onChange={onChange}
           />
           <Button
             text="Добавить по индексу"
             onClick={addByIndex}
             isLoader={isLoader.forButtAddByInd}
-            disabled={
-              inputElement.length !== 0 && inputIndex.length !== 0
-                ? false
-                : true
-            }
+            disabled={values.inputElement.length !== 0 && isValidIndex ? false : true}
           />
           <Button
             text="Удалить по индексу"
             onClick={deleteByIndex}
             isLoader={isLoader.forButtDelByInd}
             disabled={
-              mainArray.length === 0 ||
-              isLoader.allDis ||
-              inputIndex.length === 0
+              mainArray.length === 0 || isLoader.allDis || !isValidIndex
             }
           />
         </div>

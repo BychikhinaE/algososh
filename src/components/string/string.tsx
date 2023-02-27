@@ -5,6 +5,7 @@ import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import styles from "./string.module.css";
 import { ElementStates } from "../../types/element-states";
+import { useSimpleForm } from "../../hooks/useForm";
 
 export const delay = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -13,13 +14,9 @@ export const delay = (ms: number) => {
 export const StringComponent: React.FC = () => {
   //массив в который запишем строку по отдельным буквам-элементам и их состоянием
   let arr: Array<{ item: string; state: ElementStates }> = [];
-  //Сюда записывается ввод от пользователя
-  const [input, setInput] = useState<string>("");
+  const {input, onChange, setInput} =useSimpleForm('')
   const [mainArray, setMainArray] = useState<typeof arr>();
   const [isLoading, setIsLoading] = useState(false);
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
 
   const swap = (
     arr: Array<{ item: string; state: ElementStates }>,
