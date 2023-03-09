@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr auto auto 56px auto;
+  gap: 12px;
+  min-width: 70%;
+}
+.list {
+  list-style: none;
+  display: flex;
+  max-width: 85%;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 72px;
+  padding: 0;
+}
+
+.item {
+  margin-top: 48px;
+}
