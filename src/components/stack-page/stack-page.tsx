@@ -91,7 +91,6 @@ export const StackPage: React.FC = () => {
             disabled={st.isEmpty()}
             isLoader={buttonState.isLoadForButtDel}
           />
-          {/* мне стыдно за такую верстку, но это было быстро когда другой код еще мучительнее((*/}
           <div> </div>
           <Button
             text="Очистить"

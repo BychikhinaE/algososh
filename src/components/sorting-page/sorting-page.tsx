@@ -192,7 +192,6 @@ export const SortingPage: React.FC = () => {
             disabled={filterState.isLoadButtonAsc}
             isLoader={filterState.isLoadButtonDes}
           />
-          {/* если остальной код не очень получается то на верстку можно забить же? */}
           <div> </div>
           <Button
             text="Новый массив"
