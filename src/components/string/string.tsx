@@ -38,12 +38,14 @@ export const StringComponent: React.FC = () => {
             maxLength={11}
             value={input || ""}
             onChange={onChange}
+            data-cy='input'
           />
           <Button
             text="Развернуть"
             type="submit"
             isLoader={isLoading}
             disabled={input.length < 2}
+            data-cy="button"
           />
         </form>
         {mainArray && (

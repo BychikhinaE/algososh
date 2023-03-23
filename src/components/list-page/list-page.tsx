@@ -322,30 +322,35 @@ export const ListPage: React.FC = () => {
             name='inputElement'
             value={values.inputElement}
             onChange={onChange}
+            data-cy="input-el"
           />
           <Button
             text="Добавить в head"
             onClick={addInHead}
             isLoader={isLoader.forButtHead}
             disabled={values.inputElement.length === 0 || isLoader.allDis}
+            data-cy="add-head"
           />
           <Button
             text="Добавить в tail"
             onClick={addInTail}
             isLoader={isLoader.forButtTail}
             disabled={values.inputElement.length === 0 || isLoader.allDis}
+            data-cy="add-tail"
           />
           <Button
             text="Удалить из head"
             onClick={deleteFromHead}
             isLoader={isLoader.forButtDelHead}
             disabled={mainArray.length === 0 || isLoader.allDis}
+            data-cy="delete-head"
           />
           <Button
             text="Удалить из tail"
             onClick={deleteFromTail}
             isLoader={isLoader.forButtDelTail}
             disabled={mainArray.length === 0 || isLoader.allDis}
+            data-cy="delete-tail"
           />
         </div>
         <div className={styles.formIndex}>
@@ -355,12 +360,14 @@ export const ListPage: React.FC = () => {
             name='inputIndex'
             value={values.inputIndex}
             onChange={onChange}
+            data-cy="input-index"
           />
           <Button
             text="Добавить по индексу"
             onClick={addByIndex}
             isLoader={isLoader.forButtAddByInd}
             disabled={values.inputElement.length !== 0 && isValidIndex ? false : true}
+            data-cy="add-by-index"
           />
           <Button
             text="Удалить по индексу"
@@ -369,6 +376,7 @@ export const ListPage: React.FC = () => {
             disabled={
               mainArray.length === 0 || isLoader.allDis || !isValidIndex
             }
+            data-cy="delete-by-index"
           />
         </div>
         <ul className={styles.list}>

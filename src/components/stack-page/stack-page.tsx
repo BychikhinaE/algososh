@@ -78,31 +78,40 @@ export const StackPage: React.FC = () => {
             maxLength={4}
             value={input}
             onChange={onChange}
+            data-cy="input"
           />
           <Button
             text="Добавить"
             onClick={onClickAdd}
             disabled={input.length === 0}
             isLoader={buttonState.isLoadForButtAdd}
+            data-cy="btn-add"
           />
           <Button
             text="Удалить"
             onClick={onClickDelete}
             disabled={st.isEmpty()}
             isLoader={buttonState.isLoadForButtDel}
+            data-cy="btn-delete"
           />
           <div> </div>
           <Button
             text="Очистить"
             onClick={onClickClean}
             disabled={st.isEmpty()}
+            data-cy="btn-clean"
           />
         </div>
         <ul className={styles.list}>
           {mainArray &&
             mainArray.map((item, index) => (
               <li key={index} className={styles.item}>
-                <Circle letter={item.item} state={item.state} index={index} />
+                <Circle 
+                letter={item.item} 
+                state={item.state} 
+                index={index} 
+                head={index === (st.getSize() - 1) ? 'top' : ''}
+                />
               </li>
             ))}
         </ul>
