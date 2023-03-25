@@ -88,20 +88,24 @@ describe("тест компонента Список", () => {
 
   it("добавление элемента по индексу", () => {
     cy.clock();
+    const index = 2;
     cy.get("[class*=circle_circle]").as("els");
     cy.get("@input-el").type("1");
-    cy.get("@input-index").type("2");
+    cy.get("@input-index").type(String(index));
     cy.get("@add-by-index").should("be.enabled").click();
 
     //Сначала маленький кружком
-    cy.get("@els")
-      .eq(2)
-      .should("have.text", "1")
-      .and("have.css", "border-color", cssForBorder.changing);
-    cy.tick(500);
+    for (let i = 0; i <= index; i++) {
+      cy.get("@els")
+        .eq(i)
+        .should("have.text", "1")
+        .and("have.css", "border-color", cssForBorder.changing);
+      cy.tick(1000);
+    }
+
     //Теперь в общем списке
     cy.get("@els")
-      .eq(2)
+      .eq(index)
       .should("have.text", "1")
       .and("have.css", "border-color", cssForBorder.modified);
 
@@ -166,24 +170,31 @@ describe("тест компонента Список", () => {
 
   it("удаление элемента  по индексу", () => {
     cy.clock();
+    const index = 2;
     cy.get("[class*=circle_circle]").as("els");
 
-    cy.get("@input-index").type("2");
+    cy.get("@input-index").type(String(index));
     cy.get("@delete-by-index").should("be.enabled").click();
 
-    //большой пустой кружок
-    cy.get("@els")
-      .eq(2)
-      .should("have.text", "")
-      .and("have.css", "border-color", cssForBorder.changing);
-    cy.get("@els")
-      .eq(3)
-      .should("have.css", "border-color", cssForBorder.changing);
+    //анимация
+    for (let i = 0; i <= index; i++) {
+      cy.get("@els")
+        .eq(i)
+        .should("have.css", "border-color", cssForBorder.changing);
+      cy.tick(1000);
+    }
     cy.tick(500);
-
+    //большой пустой cиний кружок
     cy.get("@els")
-      .eq(2)
-      .should("have.css", "border-color", cssForBorder.default);
+      .eq(index)
+      .should("have.text", "")
+      .and("have.css", "border-color", cssForBorder.default);
+    //появился маленький кружок
+    cy.get("[class*='circle_small']")
+      .should("exist")
+      .and("have.css", "border-color", cssForBorder.changing);
+    cy.tick(1000);
+
     cy.get("@els").should("have.length", 3);
   });
 });

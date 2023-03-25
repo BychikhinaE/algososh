@@ -1,4 +1,4 @@
-import React, {  FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -13,18 +13,18 @@ export const delay = (ms: number) => {
 };
 
 export const StringComponent: React.FC = () => {
-  const {input, onChange, setInput} =useSimpleForm('')
-  const [mainArray, setMainArray] = useState<Array<{item: string; state: ElementStates}>>([]);
+  const { input, onChange, setInput } = useSimpleForm("");
+  const [mainArray, setMainArray] = useState<
+    Array<{ item: string; state: ElementStates }>
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
-
-
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setInput("");
 
-    onSubmitReverse(input, setMainArray)
+    await onSubmitReverse(input, setMainArray);
 
     setIsLoading(false);
   };
@@ -38,7 +38,7 @@ export const StringComponent: React.FC = () => {
             maxLength={11}
             value={input || ""}
             onChange={onChange}
-            data-cy='input'
+            data-cy="input"
           />
           <Button
             text="Развернуть"
