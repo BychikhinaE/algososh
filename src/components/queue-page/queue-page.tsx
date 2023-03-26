@@ -153,24 +153,28 @@ export const QueuePage: React.FC = () => {
             maxLength={4}
             value={input}
             onChange={onChange}
+            data-cy="input"
           />
           <Button
             text="Добавить"
             onClick={onClickAdd}
             disabled={input.length === 0 || indexTail === 7 ? true : false}
             isLoader={buttonState.isLoadForButtAdd}
+            data-cy="btn-add"
           />
           <Button
             text="Удалить"
             onClick={onClickDelete}
             disabled={buttonState.buttonDelete}
             isLoader={buttonState.isLoadForButtDel}
+            data-cy="btn-delete"
           />
           <div> </div>
           <Button
             text="Очистить"
             onClick={onClickClean}
             disabled={buttonState.buttonClean}
+            data-cy="btn-clean"
           />
         </div>
         <ul className={styles.list}>

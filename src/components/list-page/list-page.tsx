@@ -1,4 +1,4 @@
-import React, { useState,  useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -20,7 +20,10 @@ type elemSmallCircle = {
 };
 
 export const ListPage: React.FC = () => {
-  const {values, onChange, setValues} = useForm({inputElement: '', inputIndex: ''});
+  const { values, onChange, setValues } = useForm({
+    inputElement: "",
+    inputIndex: "",
+  });
   const [mainArray, setMainArray] = useState<Array<TElem>>([]);
   const [isLoader, setIsLoader] = useState({
     forButtHead: false,
@@ -80,7 +83,7 @@ export const ListPage: React.FC = () => {
       item: values.inputElement,
       state: ElementStates.Default,
     };
-    setValues({...values, inputElement: ''});
+    setValues({ ...values, inputElement: "" });
 
     //Покажим элемент сверху
     setNewElemInHead({ item: newElem.item, index: 0 });
@@ -114,7 +117,7 @@ export const ListPage: React.FC = () => {
       item: values.inputElement,
       state: ElementStates.Default,
     };
-    setValues({...values, inputElement: ''});
+    setValues({ ...values, inputElement: "" });
     //Покажим элемент сверху
     setNewElemInHead({ item: newElem.item, index: mainArray.length - 1 });
     await delay(500);
@@ -156,29 +159,33 @@ export const ListPage: React.FC = () => {
       state: ElementStates.Default,
     };
     const index = Number(values.inputIndex);
-    setValues({...values, inputElement: '', inputIndex: ''});
-    // setInputIndex("");
+    setValues({ ...values, inputElement: "", inputIndex: "" });
 
+    let colorArr = mainArray.slice();
     //Покажим элемент сверху
-    setNewElemInHead({ item: newElem.item, index: index });
-    await delay(500);
-    setNewElemInHead(null);
+    for (let i = 0; i <= index; i++) {
+      setNewElemInHead({ item: newElem.item, index: i });
+      colorArr = mainArray.map((elem, currIndex) => {
+        if (currIndex < i) {
+          return {
+            item: elem.item,
+            state: ElementStates.Changing,
+          };
+        } else {
+          return elem;
+        }
+      });
+      setMainArray(colorArr);
+      await delay(1000);
+    }
 
-    //теперь раскрасим массив
-    const colorArr = mainArray.map((elem, currIndex) => {
-      if (currIndex < index) {
-        return {
-          item: elem.item,
-          state: ElementStates.Changing,
-        };
-      } else {
-        return elem;
-      }
-    });
     colorArr.splice(index, 0, {
       item: newElem.item,
       state: ElementStates.Modified,
     });
+
+    setNewElemInHead(null);
+
     setMainArray(colorArr);
     await delay(1000);
 
@@ -274,29 +281,36 @@ export const ListPage: React.FC = () => {
       allDis: true,
     }));
     let index = Number(values.inputIndex);
-    setValues({...values, inputIndex: ''});
+    setValues({ ...values, inputIndex: "" });
 
-    //раскрасим массив
-    const colorArr = mainArray.map((elem, currIndex) => {
-      if (currIndex < index) {
-        return {
-          item: elem.item,
-          state: ElementStates.Changing,
-        };
-      } else if (currIndex === index) {
-        return {
-          item: "",
-          state: ElementStates.Changing,
-        };
-      } else {
-        return elem;
-      }
-    });
+    let colorArr = mainArray.slice();
+
+    //код анимации
+    for (let i = 0; i <= index; i++) {
+
+      colorArr = mainArray.map((elem, currIndex) => {
+        if (currIndex <= i) {
+          return {
+            item: elem.item,
+            state: ElementStates.Changing,
+          };
+        } else {
+          return elem;
+        }
+      });
+      setMainArray(colorArr);
+      await delay(1000);
+    }
+
+    colorArr[index] = {
+      item: "",
+      state: ElementStates.Default,
+    };
     setMainArray(colorArr);
-
-    //Покажим элемент снизу
-    setDelElemInTail({ item: mainArray[index].item, index: index });
     await delay(500);
+    //покажем снизу удаляемый элемент
+    setDelElemInTail({ item: mainArray[index].item, index: index });
+    await delay(1000);
     setDelElemInTail(null);
 
     // удалим из списка, обновим картинку -все синие кружки
@@ -319,48 +333,57 @@ export const ListPage: React.FC = () => {
             isLimitText={true}
             maxLength={4}
             placeholder="Введите значение"
-            name='inputElement'
+            name="inputElement"
             value={values.inputElement}
             onChange={onChange}
+            data-cy="input-el"
           />
           <Button
             text="Добавить в head"
             onClick={addInHead}
             isLoader={isLoader.forButtHead}
             disabled={values.inputElement.length === 0 || isLoader.allDis}
+            data-cy="add-head"
           />
           <Button
             text="Добавить в tail"
             onClick={addInTail}
             isLoader={isLoader.forButtTail}
             disabled={values.inputElement.length === 0 || isLoader.allDis}
+            data-cy="add-tail"
           />
           <Button
             text="Удалить из head"
             onClick={deleteFromHead}
             isLoader={isLoader.forButtDelHead}
             disabled={mainArray.length === 0 || isLoader.allDis}
+            data-cy="delete-head"
           />
           <Button
             text="Удалить из tail"
             onClick={deleteFromTail}
             isLoader={isLoader.forButtDelTail}
             disabled={mainArray.length === 0 || isLoader.allDis}
+            data-cy="delete-tail"
           />
         </div>
         <div className={styles.formIndex}>
           <Input
             type="number"
             placeholder="Введите индекс"
-            name='inputIndex'
+            name="inputIndex"
             value={values.inputIndex}
             onChange={onChange}
+            data-cy="input-index"
           />
           <Button
             text="Добавить по индексу"
             onClick={addByIndex}
             isLoader={isLoader.forButtAddByInd}
-            disabled={values.inputElement.length !== 0 && isValidIndex ? false : true}
+            disabled={
+              values.inputElement.length !== 0 && isValidIndex ? false : true
+            }
+            data-cy="add-by-index"
           />
           <Button
             text="Удалить по индексу"
@@ -369,6 +392,7 @@ export const ListPage: React.FC = () => {
             disabled={
               mainArray.length === 0 || isLoader.allDis || !isValidIndex
             }
+            data-cy="delete-by-index"
           />
         </div>
         <ul className={styles.list}>
@@ -402,7 +426,13 @@ export const ListPage: React.FC = () => {
                     ) : null
                   }
                 />
-                {index + 1 < mainArray.length && <ArrowIcon />}
+                {index + 1 < mainArray.length && (
+                  <ArrowIcon
+                    fill={
+                      state === ElementStates.Changing ? "#d252e1" : "#0032FF"
+                    }
+                  />
+                )}
               </li>
             ))}
         </ul>

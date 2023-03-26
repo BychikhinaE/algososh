@@ -12,7 +12,7 @@ export const FibonacciPage: React.FC = () => {
   const { input, onChange, setInput } = useSimpleForm("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setInput("");
@@ -32,10 +32,9 @@ export const FibonacciPage: React.FC = () => {
 
         setMainArray([...arr]);
       }
-      console.log(arr);
     };
 
-    input && fibNumbers(Number(input));
+    await fibNumbers(Number(input));
     setIsLoading(false);
   };
 
@@ -49,12 +48,14 @@ export const FibonacciPage: React.FC = () => {
             max={19}
             value={input}
             onChange={onChange}
+            data-cy="input"
           />
           <Button
             text="Рассчитать"
             type="submit"
             isLoader={isLoading}
             disabled={!input || Number(input) > 19 || Number(input) === 0}
+            data-cy="button"
           />
         </form>
         {mainArray && (
