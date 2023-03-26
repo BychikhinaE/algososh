@@ -1,4 +1,4 @@
-import { cssForBorder } from "./string.cy";
+import { circles, headCircle, cssForBorder } from "./constants";
 
 const testInput = ["1", null, "2", null, "3", null];
 //для проверки анимации при добавлении элементов
@@ -29,7 +29,7 @@ const testInputAnimation = [
 
 describe("тест компонента стек", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/stack");
+    cy.visit("/stack");
     cy.get('[data-cy="input"]').as("input");
     cy.get('[data-cy="btn-add"]').as("btn-add");
     cy.get('[data-cy="btn-delete"]').as("btn-delete");
@@ -54,13 +54,13 @@ describe("тест компонента стек", () => {
         lenCicleArray++;
       }
 
-      cy.get("[class^='circle_circle']")
+      cy.get(circles)
         .should("have.length", lenCicleArray)
         .each((el, index) => {
           cy.get(el).contains(step[index].item);
           cy.get(el).should("have.css", "border-color", step[index].state);
           cy.get(el)
-            .siblings("[class*='circle_head']")
+            .siblings(headCircle)
             .should("have.text", step[index].marker);
         });
       cy.tick(500);
@@ -84,18 +84,18 @@ describe("тест компонента стек", () => {
     cy.get("@btn-delete").should("be.enabled").click();
 
     cy.tick(500);
-    cy.get("[class*='circle_circle']").as("els").should("have.length", 2);
+    cy.get(circles).as("els").should("have.length", 2);
 
     cy.get("@els").then((item) => {
       cy.get(item[0]).contains("1");
       cy.get(item[0]).should("have.css", "border-color", cssForBorder.default);
       cy.get(item[0])
-        .siblings("[class*='circle_head']")
+        .siblings(headCircle)
         .should("have.text", "");
       cy.get(item[1]).contains("2");
       cy.get(item[1]).should("have.css", "border-color", cssForBorder.default);
       cy.get(item[1])
-        .siblings("[class*='circle_head']")
+        .siblings(headCircle)
         .should("have.text", "top");
     });
 
@@ -114,7 +114,7 @@ describe("тест компонента стек", () => {
     });
 
     cy.get("@btn-clean").should("be.enabled").click();
-    cy.get("[class^='circle_circle']").should("not.exist");
+    cy.get(circles).should("not.exist");
 
     cy.get("@btn-add").should("be.disabled");
 

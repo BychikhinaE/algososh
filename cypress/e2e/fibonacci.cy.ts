@@ -1,8 +1,9 @@
+import { circles } from "./constants";
 const testFibonacci = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144];
 
 describe("тест компонента фибоначчи", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/fibonacci");
+    cy.visit("/fibonacci");
     cy.get('[data-cy="input"]').as("input");
     cy.get('[data-cy="button"]').as("button");
   });
@@ -17,7 +18,7 @@ describe("тест компонента фибоначчи", () => {
     cy.get("@input").type(testFibonacci.length - 1);
     cy.get("@button").should("be.enabled").click();
 
-    cy.get("[class^='circle_circle']").each((el, index) => {
+    cy.get(circles).each((el, index) => {
       cy.get(el).contains(testFibonacci[index]);
       cy.tick(500);
     });

@@ -1,42 +1,40 @@
-const url = 'http://localhost:3000'
-
 describe('app works correctly with routes', () => {
   before(function() {
-    cy.visit(url);
+    cy.visit('/');
   });
 
   it("should open page by default", () => {
-    cy.visit(url);
+    cy.visit('/');
     cy.contains("МБОУ АЛГОСОШ");
   });
 
   it('should open page recursion', () => {
-    cy.visit(`${url}/recursion`);
+    cy.visit('/recursion');
     cy.contains('Строка');
   })
 
   it('should open page fibonacci', () => {
-    cy.visit(`${url}/fibonacci`);
+    cy.visit('/fibonacci');
     cy.contains('Последовательность Фибоначчи');
   })
 
   it('should open page sorting', () => {
-    cy.visit(`${url}/sorting`);
+    cy.visit('/sorting');
     cy.contains('Сортировка массива');
   })
 
   it('should open page stack', () => {
-    cy.visit(`${url}/stack`);
+    cy.visit('/stack');
     cy.contains('Стек');
   })
 
   it('should open page list', () => {
-    cy.visit(`${url}/list`);
+    cy.visit('/list');
     cy.contains('Связный список');
   })
 
   it('should open page queue', () => {
-    cy.visit(`${url}/queue`);
+    cy.visit('/queue');
     cy.contains('Очередь');
   })
 

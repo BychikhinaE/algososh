@@ -1,8 +1,4 @@
-export const cssForBorder = {
-  default: "rgb(0, 50, 255)",
-  changing: "rgb(210, 82, 225)",
-  modified: "rgb(127, 224, 81)",
-};
+import { circles, cssForBorder } from "./constants";
 
 const testStepsReverse = [
   [
@@ -37,7 +33,7 @@ const testStepsReverse = [
 
 describe("тест компонента строка", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/recursion");
+    cy.visit("/recursion");
     cy.get('[data-cy="input"]').as("input");
     cy.get('[data-cy="button"]').as("button");
   });
@@ -53,7 +49,7 @@ describe("тест компонента строка", () => {
     cy.get("@button").should("be.enabled").click();
 
     testStepsReverse.forEach((step) => {
-      cy.get("[class^='circle_circle']")
+      cy.get(circles)
         .should("have.length", 5)
         .each((el, index) => {
           cy.get(el).contains(step[index].item);

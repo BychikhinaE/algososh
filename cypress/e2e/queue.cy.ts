@@ -1,4 +1,4 @@
-import { cssForBorder } from "./string.cy";
+import { circles, headCircle, tailCircle, cssForBorder } from "./constants";
 const testInput = ["1", null, "2", null, "3", null];
 const testInputAnimation = [
   [{ item: "", state: cssForBorder.changing, head: "", tail: "" }],
@@ -28,7 +28,7 @@ const testInputAnimation = [
 
 describe("тест компонента Очередь", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/queue");
+    cy.visit("/queue");
     cy.get('[data-cy="input"]').as("input");
     cy.get('[data-cy="btn-add"]').as("btn-add");
     cy.get('[data-cy="btn-delete"]').as("btn-delete");
@@ -50,16 +50,16 @@ describe("тест компонента Очередь", () => {
         cy.get("@btn-add").should("be.enabled").click();
       }
 
-      cy.get("[class^='circle_circle']").each((el, index) => {
+      cy.get(circles).each((el, index) => {
         if (index < len) {
           cy.get(el).should("have.text", step[index].item);
 
           cy.get(el).should("have.css", "border-color", step[index].state);
           cy.get(el)
-            .siblings("[class*='circle_head']")
+            .siblings(headCircle)
             .should("have.text", step[index].head);
           cy.get(el)
-            .siblings("[class*='circle_tail']")
+            .siblings(tailCircle)
             .should("have.text", step[index].tail);
         }
       });
@@ -84,25 +84,25 @@ describe("тест компонента Очередь", () => {
     cy.get("@btn-delete").should("be.enabled").click();
 
     cy.tick(500);
-    cy.get("[class*='circle_circle']").as("els");
+    cy.get(circles).as("els");
 
     cy.get("@els").then((item) => {
       cy.get(item[1]).contains("2");
       cy.get(item[1]).should("have.css", "border-color", cssForBorder.default);
       cy.get(item[1])
-        .siblings("[class*='circle_head']")
+        .siblings(headCircle)
         .should("have.text", "head");
       cy.get(item[1])
-        .siblings("[class*='circle_tail']")
+        .siblings(tailCircle)
         .should("have.text", "");
 
       cy.get(item[2]).contains("3");
       cy.get(item[2]).should("have.css", "border-color", cssForBorder.default);
       cy.get(item[2])
-        .siblings("[class*='circle_head']")
+        .siblings(headCircle)
         .should("have.text", "");
       cy.get(item[2])
-        .siblings("[class*='circle_tail']")
+        .siblings(tailCircle)
         .should("have.text", "tail");
     });
 
@@ -123,11 +123,11 @@ describe("тест компонента Очередь", () => {
     cy.get("@btn-clean").should("be.enabled").click();
     cy.tick(500);
 
-    cy.get("[class^='circle_circle']").each((el) => {
+    cy.get(circles).each((el) => {
       cy.get(el).should("have.text", "");
       cy.get(el).should("have.css", "border-color", cssForBorder.default);
-      cy.get(el).siblings("[class*='circle_head']").should("have.text", "");
-      cy.get(el).siblings("[class*='circle_tail']").should("have.text", "");
+      cy.get(el).siblings(headCircle).should("have.text", "");
+      cy.get(el).siblings(tailCircle).should("have.text", "");
     });
 
     cy.get("@btn-delete").should("be.disabled");

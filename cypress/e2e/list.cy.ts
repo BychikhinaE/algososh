@@ -1,8 +1,8 @@
-import { cssForBorder } from "./string.cy";
+import { circles, headCircle, tailCircle, smallCircle, cssForBorder } from "./constants";
 
 describe("тест компонента Список", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/list");
+    cy.visit("/list");
     cy.get('[data-cy="input-el"]').as("input-el");
     cy.get('[data-cy="add-head"]').as("add-head");
     cy.get('[data-cy="add-tail"]').as("add-tail");
@@ -22,15 +22,15 @@ describe("тест компонента Список", () => {
   });
 
   it("отрисовка дефолтного списка корректна", () => {
-    cy.get("[class*=circle_circle]").as("els");
+    cy.get(circles).as("els");
     cy.get("@els").should("have.length", 4);
     cy.get("@els")
       .first()
-      .siblings("[class*='circle_head']")
+      .siblings(headCircle)
       .should("have.text", "head");
     cy.get("@els")
       .last()
-      .siblings("[class*='circle_tail']")
+      .siblings(tailCircle)
       .should("have.text", "tail");
 
     cy.get("@els").each((el, index) => {
@@ -42,14 +42,14 @@ describe("тест компонента Список", () => {
 
   it("добавление элемента в head корректно", () => {
     cy.clock();
-    cy.get("[class*=circle_circle]").as("els");
+    cy.get(circles).as("els");
 
     cy.get("@input-el").type("1");
     cy.get("@add-head").should("be.enabled").click();
     cy.get("@input-el").should("be.empty");
     cy.get("@add-head").should("be.disabled");
 
-    cy.get("[class*='circle_small']")
+    cy.get(smallCircle)
       .should("have.text", "1")
       .and("have.css", "border-color", cssForBorder.changing);
 
@@ -58,7 +58,7 @@ describe("тест компонента Список", () => {
     cy.get("@els")
       .first()
       .should("have.text", "1")
-      .siblings("[class*='circle_head']")
+      .siblings(headCircle)
       .should("have.text", "head");
 
     cy.get("@els").should("have.length", 5);
@@ -66,12 +66,12 @@ describe("тест компонента Список", () => {
 
   it("добавление элемента в tail корректно", () => {
     cy.clock();
-    cy.get("[class*=circle_circle]").as("els");
+    cy.get(circles).as("els");
 
     cy.get("@input-el").type("1");
     cy.get("@add-tail").should("be.enabled").click();
 
-    cy.get("[class*='circle_small']")
+    cy.get(smallCircle)
       .should("have.text", "1")
       .and("have.css", "border-color", cssForBorder.changing);
 
@@ -80,7 +80,7 @@ describe("тест компонента Список", () => {
     cy.get("@els")
       .last()
       .should("have.text", "1")
-      .siblings("[class*='circle_tail']")
+      .siblings(tailCircle)
       .should("have.text", "tail");
 
     cy.get("@els").should("have.length", 5);
@@ -89,7 +89,7 @@ describe("тест компонента Список", () => {
   it("добавление элемента по индексу", () => {
     cy.clock();
     const index = 2;
-    cy.get("[class*=circle_circle]").as("els");
+    cy.get(circles).as("els");
     cy.get("@input-el").type("1");
     cy.get("@input-index").type(String(index));
     cy.get("@add-by-index").should("be.enabled").click();
@@ -114,11 +114,11 @@ describe("тест компонента Список", () => {
 
   it("удаление элемента из head", () => {
     cy.clock();
-    cy.get("[class^=circle_circle]").as("els");
+    cy.get(circles).as("els");
 
     cy.get("@delete-head").click();
 
-    cy.get("[class*='circle_small']").should(
+    cy.get(smallCircle).should(
       "have.css",
       "border-color",
       cssForBorder.changing
@@ -134,7 +134,7 @@ describe("тест компонента Список", () => {
     cy.get("@els")
       .first()
       .should("have.css", "border-color", cssForBorder.default)
-      .siblings("[class*='circle_head']")
+      .siblings(headCircle)
       .should("have.text", "head");
 
     cy.get("@els").should("have.length", 3);
@@ -142,11 +142,11 @@ describe("тест компонента Список", () => {
 
   it("удаление элемента из tail", () => {
     cy.clock();
-    cy.get("[class*=circle_circle]").as("els");
+    cy.get(circles).as("els");
 
     cy.get("@delete-tail").should("be.enabled").click();
 
-    cy.get("[class*='circle_small']").and(
+    cy.get(smallCircle).and(
       "have.css",
       "border-color",
       cssForBorder.changing
@@ -162,7 +162,7 @@ describe("тест компонента Список", () => {
     cy.get("@els")
       .last()
       .should("have.css", "border-color", cssForBorder.default)
-      .siblings("[class*='circle_tail']")
+      .siblings(tailCircle)
       .should("have.text", "tail");
 
     cy.get("@els").should("have.length", 3);
@@ -171,7 +171,7 @@ describe("тест компонента Список", () => {
   it("удаление элемента  по индексу", () => {
     cy.clock();
     const index = 2;
-    cy.get("[class*=circle_circle]").as("els");
+    cy.get(circles).as("els");
 
     cy.get("@input-index").type(String(index));
     cy.get("@delete-by-index").should("be.enabled").click();
@@ -190,7 +190,7 @@ describe("тест компонента Список", () => {
       .should("have.text", "")
       .and("have.css", "border-color", cssForBorder.default);
     //появился маленький кружок
-    cy.get("[class*='circle_small']")
+    cy.get(smallCircle)
       .should("exist")
       .and("have.css", "border-color", cssForBorder.changing);
     cy.tick(1000);
